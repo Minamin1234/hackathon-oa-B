@@ -11,6 +11,9 @@ export default (io, socket) => {
 
   // 投稿メッセージを送信する
   socket.on("publishEvent", (data) => {
+    if (!data) {
+      return
+    }
     io.sockets.emit("publishEvent", data)
   })
 }
