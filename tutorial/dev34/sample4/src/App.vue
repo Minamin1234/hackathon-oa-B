@@ -12,7 +12,3 @@ const handleMouseOver = () => {
   <button @click="handleClick">click</button>
   <button @mouseover="handleMouseOver">MouseOver</button>
 </template>
-
-
-
-

@@ -8,6 +8,7 @@ const router = createRouter({
     {
       path: "/",
       component: Home,
+      name: "home"
     },
     {
       path: "/rakus",

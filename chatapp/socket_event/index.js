@@ -1,6 +1,7 @@
 export default (io, socket) => {
   // 入室メッセージをクライアントに送信する
   socket.on("enterEvent", (data) => {
+    //console.log(data)
     socket.broadcast.emit("enterEvent", data)
   })
 
@@ -11,6 +12,9 @@ export default (io, socket) => {
 
   // 投稿メッセージを送信する
   socket.on("publishEvent", (data) => {
+    if (!data) {
+      return
+    }
     io.sockets.emit("publishEvent", data)
   })
 }
