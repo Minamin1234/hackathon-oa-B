@@ -3,8 +3,8 @@ import { inject, ref, reactive, onMounted } from "vue"
 import io from "socket.io-client"
 
 // #region global state
-//const userName = inject("userName")
-const userName = "Rakus"
+const userName = inject("userName")
+// const userName = "Rakus"
 // #endregion
 
 // #region local variable
@@ -38,6 +38,7 @@ const onPublish = () => {
 
 // 退室メッセージをサーバに送信する
 const onExit = () => {
+  socket.emit("exitEvent", userName.value)
 }
 
 // メモを画面上に表示する
@@ -79,13 +80,15 @@ const onReceivePublish = (data) => {
 // イベント登録をまとめる
 const registerSocketEvent = () => {
   // 入室イベントを受け取ったら実行
-  socket.on("enterEvent", (data) => {
 
+  socket.on("enterEvent", (data) => {
+    chatList.unshift(data)
   })
 
   // 退室イベントを受け取ったら実行
   socket.on("exitEvent", (data) => {
 
+    chatList.unshift(data)
   })
 
   // 投稿イベントを受け取ったら実行
