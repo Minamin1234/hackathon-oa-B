@@ -3,8 +3,8 @@ import { inject, ref, reactive, onMounted } from "vue"
 import io from "socket.io-client"
 
 // #region global state
-//const userName = inject("userName")
-const userName = "Rakus"
+const userName = inject("userName")
+// const userName = "Rakus"
 // #endregion
 
 // #region local variable
@@ -34,8 +34,6 @@ const onPublish = () => {
   // 入力欄を初期化
   chatContent.value = ""
   console.log(msg)
-
-  // socket.emit("enterEvent", "さん")
 }
 
 // 退室メッセージをサーバに送信する
