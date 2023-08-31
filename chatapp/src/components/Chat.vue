@@ -27,13 +27,13 @@ onMounted(() => {
 // 投稿メッセージをサーバに送信する
 const onPublish = () => {
   let msg = { 
-    name: userName,
+    name: userName.value,
     content: chatContent.value
   }
   socket.emit("publishEvent", msg);
   // 入力欄を初期化
   chatContent.value = ""
-  console.log(msg)
+  //console.log(msg)
 }
 
 // 退室メッセージをサーバに送信する
@@ -58,10 +58,7 @@ const onMemo = () => {
 // #region socket event handler
 // サーバから受信した入室メッセージ画面上に表示する
 const onReceiveEnter = (data) => {
-  let msg = {
-    name: "sys",
-    content: `${userName}が入室しました`
-  }
+  //console.log(data)
   chatList.push(msg)
 }
 
@@ -82,13 +79,21 @@ const registerSocketEvent = () => {
   // 入室イベントを受け取ったら実行
 
   socket.on("enterEvent", (data) => {
-    chatList.unshift(data)
+    console.log(data)
+    let msg = {
+      name: "システム",
+      content: `${data}さんが入室しました。`
+    }
+    chatList.unshift(msg)
   })
 
   // 退室イベントを受け取ったら実行
   socket.on("exitEvent", (data) => {
-
-    chatList.unshift(data)
+    let msg = {
+      name: "システム",
+      content: `${data}さんが退室しました。`
+    }
+    chatList.unshift(msg)
   })
 
   // 投稿イベントを受け取ったら実行
@@ -109,14 +114,12 @@ const registerSocketEvent = () => {
         <button class="button-normal" type="button" @click="onPublish">投稿</button>
         <button class="button-normal util-ml-8px" type="button" @click="onMemo">メモ</button>
       </div>
-      <div class="mt-5" v-if="chatList.length !== 0">
-        <ul>
+      <ul>
           <li class="item mt-4" v-for="(chat, i) in chatList" :key="i">{{ chat.name }}さん: {{ chat.content }}</li>
-        </ul>
-        <ul>
-          <li class="item mt-4" v-for="(msg, i) in memoList" :key="i">{{ msg.name }}: {{ msg.content }}</li>
-        </ul>
-      </div>
+      </ul>
+      <ul>
+        <li class="item mt-4" v-for="(msg, i) in memoList" :key="i">{{ msg.name }}: {{ msg.content }}</li>
+      </ul>
     </div>
     <router-link to="/" class="link">
       <button type="button" class="button-normal button-exit" @click="onExit">退室する</button>
