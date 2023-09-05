@@ -21,13 +21,13 @@ var Month = NowTime.getMonth()
 var date = NowTime.getDate()
 var hour = NowTime.getHours()
 var min = ("0"+NowTime.getMinutes()).slice(-2) 
-var Passsec = ref(0)
+var Passsec = 0
 var PassageID = null
 
 const TimeCount = ()=>{
-  Passsec.value++;
-  //console.log(Passsec.value);
-  if(Passsec.value == 10){
+  Passsec++;
+  //console.log(Passsec);
+  if(Passsec == 10){
     //console.log("10!!");
     TimerStop(PassageID);
   }
@@ -40,7 +40,7 @@ const TimerStart = () =>{
 }
 
 const TimerStop = () =>{
-  Passsec.value = 0;
+  Passsec = 0;
   //console.log("Stop!!");
   clearInterval(PassageID);
   document.getElementById("postbutton").disabled = false;
