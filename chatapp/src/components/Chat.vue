@@ -20,7 +20,31 @@ var Year = NowTime.getFullYear()
 var Month = NowTime.getMonth()
 var date = NowTime.getDate()
 var hour = NowTime.getHours()
-var min = ("0"+NowTime.getMinutes()).slice(-2); 
+var min = ("0"+NowTime.getMinutes()).slice(-2) 
+var Passsec = ref(0)
+var PassageID = null
+
+const TimeCount = ()=>{
+  Passsec.value++;
+  //console.log(Passsec.value);
+  if(Passsec.value == 10){
+    //console.log("10!!");
+    TimerStop(PassageID);
+  }
+}
+
+const TimerStart = () =>{
+  PassageID = setInterval(TimeCount, 1000);
+  document.getElementById("postbutton").disabled = true;
+  //console.log("TimerStart");
+}
+
+const TimerStop = () =>{
+  Passsec.value = 0;
+  //console.log("Stop!!");
+  clearInterval(PassageID);
+  document.getElementById("postbutton").disabled = false;
+}
 
 // #endregion
 
@@ -43,6 +67,7 @@ const onPublish = () => {
     // 入力欄を初期化
     chatContent.value = ""
     //console.log(msg)
+    TimerStart();
   }
 }
 
@@ -121,7 +146,7 @@ const registerSocketEvent = () => {
       <p>ログインユーザ：{{ userName }}さん</p>
       <textarea variant="outlined" placeholder="投稿文を入力してください" rows="4" class="area" type="text" v-model="chatContent"></textarea>
       <div class="mt-5">
-        <button class="button-normal" type="button" @click="onPublish">投稿</button>
+        <button class="button-normal" type="button" id="postbutton" @click="onPublish">投稿</button>
         <button class="button-normal util-ml-8px" type="button" @click="onMemo">メモ</button>
       </div>
       <ul>
