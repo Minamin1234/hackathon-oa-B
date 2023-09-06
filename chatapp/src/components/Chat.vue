@@ -61,8 +61,8 @@ const onPublish = () => {
   if (chatContent.value.trim() !== "") {
     let msg = { 
       name: userName.value,
-      content: chatContent.value
-    }
+      content: chatContent.value,
+    };
     socket.emit("publishEvent", msg);
     // 入力欄を初期化
     chatContent.value = ""
@@ -81,8 +81,8 @@ const onMemo = () => {
   // メモの内容を表示
   let msg = {
     name: "自分",
-    content: chatContent.value
-  }
+    content: chatContent.value,
+  };
 
   memoList.unshift(msg);
   // 入力欄を初期化
@@ -93,18 +93,17 @@ const onMemo = () => {
 // #region socket event handler
 // サーバから受信した入室メッセージ画面上に表示する
 const onReceiveEnter = (data) => {
-  //console.log(data)
-  chatList.push(msg)
+  chatList.push(data);
 }
 
 // サーバから受信した退室メッセージを受け取り画面上に表示する
 const onReceiveExit = (data) => {
-  chatList.push()
+  chatList.push(data);
 }
 
 // サーバから受信した投稿メッセージを画面上に表示する
 const onReceivePublish = (data) => {
-  chatList.push()
+  chatList.unshift(data);
 }
 // #endregion
 
@@ -112,7 +111,6 @@ const onReceivePublish = (data) => {
 // イベント登録をまとめる
 const registerSocketEvent = () => {
   // 入室イベントを受け取ったら実行
-
   socket.on("enterEvent", (data) => {
     console.log(data)
     let msg = {
@@ -133,9 +131,10 @@ const registerSocketEvent = () => {
 
   // 投稿イベントを受け取ったら実行
   socket.on("publishEvent", (data) => {
-    chatList.unshift(data)
+    onReceivePublish(data);
   })
 }
+
 // #endregion
 </script>
 
@@ -146,14 +145,27 @@ const registerSocketEvent = () => {
       <p>ログインユーザ：{{ userName }}さん</p>
       <textarea variant="outlined" placeholder="投稿文を入力してください" rows="4" class="area" type="text" v-model="chatContent"></textarea>
       <div class="mt-5">
-        <button class="button-normal" type="button" id="postbutton" @click="onPublish">投稿</button>
+        <button class="button-normal" type="button"  id = "postbutton" @click="onPublish">投稿</button>
         <button class="button-normal util-ml-8px" type="button" @click="onMemo">メモ</button>
       </div>
       <ul>
-          <li class="item mt-4" v-for="(chat, i) in chatList" :key="i">{{ chat.name }}さん: {{ chat.content }} {{ `${Year}年${Month + 1}月${date}日 ${hour}:${min}` }}</li>
+        <li
+          class="item mt-4"
+          v-for="(chat, i) in chatList"
+          :key="i"
+          :class="{'my-post': chat.name === userName && chat.name !== 'システム','other-user-post': chat.name !== userName && chat.name !== 'システム'}"
+        >
+        {{ userName !== 'システム' && chat.name === 'システム' ? '' : chat.name + 'さん:' }} {{ chat.content }} ({{ `${Year}/${Month + 1}/${date} ${hour}:${min}` }})
+        </li>
       </ul>
       <ul>
-        <li class="item mt-4" v-for="(msg, i) in memoList" :key="i">{{ msg.name }}: {{ msg.content }}</li>
+        <li
+          class="item mt-4"
+          v-for="(msg, i) in memoList"
+          :key="i"
+        >
+          {{ msg.name }}: {{ msg.content }}
+        </li>
       </ul>
     </div>
     <router-link to="/" class="link">
@@ -175,6 +187,20 @@ const registerSocketEvent = () => {
 
 .item {
   display: block;
+}
+
+.my-post {
+  background-color: rgba(255, 255, 0, 0.427); /* 自分の投稿の背景色 */
+  border: 2px solid orange; /* 2ピクセル幅のオレンジのボーダーを追加 */
+  border-radius: 8px;
+  padding: 8px;
+}
+
+.other-user-post {
+  background-color: rgba(195, 222, 233, 0.577); /* 相手の投稿の背景色 */
+  border: 2px solid blue; /* 2ピクセル幅のブルーのボーダーを追加 */
+  border-radius: 8px;
+  padding: 8px;
 }
 
 .util-ml-8px {
