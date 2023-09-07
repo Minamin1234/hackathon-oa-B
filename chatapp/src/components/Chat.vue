@@ -68,6 +68,9 @@ const onPublish = () => {
     chatContent.value = ""
     //console.log(msg)
     TimerStart();
+  } else {
+    // Display an alert if the message is empty
+    alert("メッセージを入力してください。");
   }
 }
 
