@@ -15,20 +15,15 @@ const socket = io()
 const chatContent = ref("")
 const chatList = reactive([])
 const memoList = reactive([])
-var NowTime = new Date()
-var Year = NowTime.getFullYear()
-var Month = NowTime.getMonth()
-var date = NowTime.getDate()
-var hour = NowTime.getHours()
-var min = ("0"+NowTime.getMinutes()).slice(-2) 
+
 var Passsec = 0
 var PassageID = null
 
 const TimeCount = ()=>{
   Passsec++;
   //console.log(Passsec);
-  if(Passsec == 10){
-    //console.log("10!!");
+  if(Passsec == 3){
+    //console.log("3!!");
     TimerStop(PassageID);
   }
 }
@@ -46,6 +41,17 @@ const TimerStop = () =>{
   document.getElementById("postbutton").disabled = false;
 }
 
+const RealTime = ()=>{
+  var NowTime = new Date()
+  var Year = NowTime.getFullYear()
+  var Month = NowTime.getMonth()
+  var date = NowTime.getDate()
+  var hour = NowTime.getHours()
+  var min = ("0"+NowTime.getMinutes()).slice(-2)
+
+  return `${Year}/${Month + 1}/${date} ${hour}:${min}`
+};
+
 // #endregion
 
 // #region lifecycle
@@ -62,6 +68,7 @@ const onPublish = () => {
     let msg = { 
       name: userName.value,
       content: chatContent.value,
+      time : RealTime(),
     };
     socket.emit("publishEvent", msg);
     // 入力欄を初期化
@@ -82,6 +89,7 @@ const onMemo = () => {
   let msg = {
     name: "自分",
     content: chatContent.value,
+    time : RealTime(),
   };
 
   memoList.unshift(msg);
@@ -115,7 +123,8 @@ const registerSocketEvent = () => {
     console.log(data)
     let msg = {
       name: "システム",
-      content: `${data}さんが入室しました。`
+      content: `${data}さんが入室しました。`,
+      time: RealTime(),
     }
     chatList.unshift(msg)
   })
@@ -124,7 +133,8 @@ const registerSocketEvent = () => {
   socket.on("exitEvent", (data) => {
     let msg = {
       name: "システム",
-      content: `${data}さんが退室しました。`
+      content: `${data}さんが退室しました。`,
+      time : RealTime(),
     }
     chatList.unshift(msg)
   })
@@ -155,7 +165,7 @@ const registerSocketEvent = () => {
           :key="i"
           :class="{'my-post': chat.name === userName && chat.name !== 'システム','other-user-post': chat.name !== userName && chat.name !== 'システム'}"
         >
-        {{ userName !== 'システム' && chat.name === 'システム' ? '' : chat.name + 'さん:' }} {{ chat.content }} ({{ `${Year}/${Month + 1}/${date} ${hour}:${min}` }})
+        {{ userName !== 'システム' && chat.name === 'システム' ? '' : chat.name + 'さん:' }} {{ chat.content }} ({{ chat.time }})
         </li>
       </ul>
       <ul>
