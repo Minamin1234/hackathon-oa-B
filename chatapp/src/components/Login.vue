@@ -38,7 +38,7 @@ const onEnter = () => {
 
 <template>
   <div class="mx-auto my-5 px-4">
-    <h1 class="text-h3 font-weight-medium">Vue.js Chat サンプル</h1>
+    <h1 class="text-h3 font-weight-medium">ログイン画面</h1>
     <div class="mt-10">
       <p>ユーザー名</p>
       <input type="text" v-model="userName" class="user-name-text" />
