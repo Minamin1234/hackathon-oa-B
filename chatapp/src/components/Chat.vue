@@ -22,7 +22,7 @@ var PassageID = null
 const TimeCount = ()=>{
   Passsec++;
   //console.log(Passsec);
-  if(Passsec == 10){
+  if(Passsec == 3){
     //console.log("3!!");
     TimerStop(PassageID);
   }
@@ -64,7 +64,10 @@ onMounted(() => {
 // 投稿メッセージをサーバに送信する
 const onPublish = () => {
   // 投稿内容が空でないかを確認
-  if(0 < Passsec) return
+  if(0 < Passsec) {
+    alert("間隔開けて投稿してください");
+    return;
+  }
   if (chatContent.value.trim() !== "") {
     let msg = { 
       name: userName.value,
