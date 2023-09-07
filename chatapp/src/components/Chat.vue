@@ -156,22 +156,13 @@ const registerSocketEvent = () => {
 </script>
 
 <template>
-  <div class="mx-auto my-5 px-4">
-    <h1 class="text-h3 font-weight-medium">Vue.js Chat チャットルーム</h1>
+  <ul>
+    <h1 class="text-h3 font-weight-medium">チャットルーム</h1>
+    <p>ログインユーザ：{{ userName }}さん</p>
+  </ul>
     <div class="mt-10">
-      <p>ログインユーザ：{{ userName }}さん</p>
-      <textarea variant="outlined" 
-      placeholder="投稿文を入力してください" 
-      rows="4" class="area" 
-      type="text" 
-      v-model="chatContent"
-      @keydown.enter.exact="onPublish">
-      </textarea>
-      <div class="mt-5">
-        <button class="button-normal" type="button"  id = "postbutton" @click="onPublish">投稿</button>
-        <button class="button-normal util-ml-8px" type="button" @click="onMemo">メモ</button>
-      </div>
-      <ul>
+      
+      <ul class="chat-list">
         <li
           class="item mt-4"
           v-for="(chat, i) in chatList"
@@ -191,10 +182,32 @@ const registerSocketEvent = () => {
         </li>
       </ul>
     </div>
-    <router-link to="/" class="link">
-      <button type="button" class="button-normal button-exit" @click="onExit">退室する</button>
-    </router-link>
-  </div>
+    
+    <!-- 画面下に固定する部分（テキスト入力＆投稿＆メモ＆退出） -->
+    <div class="fixed-bottom-container"> 
+
+      <div class="input-group">
+
+        <textarea variant="outlined"
+          placeholder="投稿文を入力してください"
+          rows="2" class="area"
+          type="text"
+          v-model="chatContent"
+          @keydown.enter.exact="onPublish">
+        </textarea>
+
+        <button class="button-normal" type="button" id="postbutton" @click="onPublish">投稿</button>
+
+        <button class="button-normal util-ml-8px" type="button" @click="onMemo">メモ</button>
+
+      </div>
+
+      <router-link to="/" class="link">
+        <button type="button" class="button-normal button-exit" @click="onExit">退室する</button>
+      </router-link>
+
+    </div>
+  
 </template>
 
 <style scoped>
@@ -235,4 +248,29 @@ const registerSocketEvent = () => {
   color: #000;
   margin-top: 8px;
 }
+
+.input-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px; /* 縦に余白を追加 */
+  margin-left: 20px; /* 左側の余白を追加 */
+  margin-right: 20px; /* 右側の余白を追加 */
+}
+
+/* 画面下固定コンテナ */
+.fixed-bottom-container{
+  position: fixed; /* 固定位置に配置 */
+  bottom: 20px; /* 画面下部からの距離を調整 */
+  left: 0; /* 左端に配置 */
+  right: 0; /* 右端に配置 */
+  text-align: center; /* ボタンを中央揃えにする */
+}
+
+/* チャット部分（スクロール実装）コンテナ */
+.chat-list {
+  max-height: 425px; /* 最大の高さを設定（必要に応じて調整） */
+  overflow-y: auto; /* 縦方向のスクロールを有効にする */
+}
+
 </style>
