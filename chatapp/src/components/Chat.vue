@@ -153,6 +153,11 @@ const registerSocketEvent = () => {
 }
 
 // #endregion
+
+const onKeydownEnter = (e) => {
+  if (e.keyCode == 229) return;
+  onPublish();
+}
 </script>
 
 <template>
@@ -193,7 +198,7 @@ const registerSocketEvent = () => {
           rows="2" class="area"
           type="text"
           v-model="chatContent"
-          @keydown.enter.exact="onPublish">
+          @keydown.enter.exact="onKeydownEnter">
         </textarea>
 
         <button class="button-normal" type="button" id="postbutton" @click="onPublish">投稿</button>
