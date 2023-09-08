@@ -5,6 +5,8 @@ import io from "socket.io-client"
 
 // #region global state
 const userName = inject("userName")
+const alert_username = ref();
+alert_username.value = false;
 // #endregion
 
 // #region local variable
@@ -21,7 +23,9 @@ const inputUserName = ref("")
 const onEnter = () => {
   // ユーザー名が入力されているかチェック
   if (userName.value == "") {
-    alert("ユーザー名を入力してください");
+    alert_username.value = true;
+    setTimeout(() => {alert_username.value = false}, 3000);
+    //alert("ユーザー名を入力してください");
     return false;
   } else {
   // 入室メッセージを送信
@@ -34,16 +38,21 @@ const onEnter = () => {
   router.push({ name: "chat" })
 }
 // #endregion
+
+const onKeydownEnter = (e) => {
+  if (e.keyCode == 229) return
+  onEnter();
+};
 </script>
 
 <template>
   <div class="mx-auto my-5 px-4">
+    <v-alert border="top" color="red" elevation="15" type="error" transition="slide-y-transition" v-model="alert_username">ユーザ名を入力してください</v-alert>
     <h1 class="text-h3 font-weight-medium">ログイン画面</h1>
     <div class="mt-10">
-      <p>ユーザー名</p>
-      <input type="text" v-model="userName" class="user-name-text" />
+      <v-text-field label="ユーザ名" v-model="userName" @keydown.enter.exact="onKeydownEnter"></v-text-field>
     </div>
-    <button type="button" @click="onEnter" class="button-normal">入室する</button>
+    <v-btn block color="accent" elevation="2" @click="onEnter">入室する</v-btn>
   </div>
 </template>
 
