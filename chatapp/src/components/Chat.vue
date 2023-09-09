@@ -30,7 +30,7 @@ const TimeCount = ()=>{
 
 const TimerStart = () =>{
   PassageID = setInterval(TimeCount, 1000);
-  document.getElementById("postbutton").disabled = true;
+  //document.getElementById("postbutton").disabled = true;
   //console.log("TimerStart");
 }
 
@@ -38,7 +38,7 @@ const TimerStop = () =>{
   Passsec = 0;
   //console.log("Stop!!");
   clearInterval(PassageID);
-  document.getElementById("postbutton").disabled = false;
+  //document.getElementById("postbutton").disabled = false;
 }
 
 const RealTime = ()=>{
@@ -64,6 +64,7 @@ onMounted(() => {
 // 投稿メッセージをサーバに送信する
 const onPublish = () => {
   // 投稿内容が空でないかを確認
+  //console.log("onPublish");
   if(0 < Passsec) {
     alert("間隔開けて投稿してください");
     return;
