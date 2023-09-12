@@ -23,7 +23,6 @@ const TimeCount = ()=>{
   Passsec++;
   //console.log(Passsec);
   if(Passsec == 3){
-    //console.log("3!!");
     TimerStop(PassageID);
   }
 }
@@ -66,7 +65,7 @@ const onPublish = () => {
   // 投稿内容が空でないかを確認
   //console.log("onPublish");
   if(0 < Passsec) {
-    alert("間隔開けて投稿してください");
+    alert("間隔をあけて投稿してください");
     return;
   }
   if (chatContent.value.trim() !== "") {
@@ -163,21 +162,27 @@ const onKeydownEnter = (e) => {
 
 <template>
   <ul>
-    <h1 class="text-h3 font-weight-medium">チャットルーム</h1>
-    <p>ログインユーザ：{{ userName }}さん</p>
+    <h1 class="text-h3 font-weight-medium" style="text-align: center;">チャットルーム</h1>
+    <p style="text-align: right; margin-top: 10px;">ログインユーザ：{{ userName }}さん</p>
   </ul>
-    <div class="mt-10">
-      
-      <ul class="chat-list">
-        <li
-          class="item mt-4"
-          v-for="(chat, i) in chatList"
-          :key="i"
-          :class="{'my-post': chat.name === userName && chat.name !== 'システム','other-user-post': chat.name !== userName && chat.name !== 'システム'}"
-        >
-        {{ userName !== 'システム' && chat.name === 'システム' ? '' : chat.name + 'さん:' }} {{ chat.content }} ({{ chat.time }})
-        </li>
-      </ul>
+  <div class="mt-10">
+    <ul class="chat-list">
+  <li
+    class="item mt-4"
+    v-for="(chat, i) in chatList"
+    :key="i"
+    style="display: flex; flex-direction: column; margin-bottom: 10px;"
+  >
+    <div
+      :class="{'my-post': chat.name === userName && chat.name !== 'システム','other-user-post': chat.name !== userName && chat.name !== 'システム'}"
+      class="balloon"
+    >
+      <span v-if="chat.name !== 'システム'" class="sender">{{ chat.name }}さん</span>
+      {{ chat.content }}
+      <span class="timestamp">{{ chat.time }}</span>
+    </div>
+  </li>
+</ul>
       <ul>
         <li
           class="item mt-4"
@@ -232,18 +237,28 @@ const onKeydownEnter = (e) => {
   white-space: pre-wrap;
 }
 
+.balloon {
+  position: relative;
+  display: inline-block;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+}
+
 .my-post {
   background-color: rgba(255, 255, 0, 0.427); /* 自分の投稿の背景色 */
   border: 2px solid orange; /* 2ピクセル幅のオレンジのボーダーを追加 */
-  border-radius: 8px;
-  padding: 8px;
+  text-align: left;
+  float: right;
+  clear: right;
 }
 
 .other-user-post {
   background-color: rgba(195, 222, 233, 0.577); /* 相手の投稿の背景色 */
   border: 2px solid blue; /* 2ピクセル幅のブルーのボーダーを追加 */
-  border-radius: 8px;
-  padding: 8px;
+  text-align: left;
+  float: left;
+  clear: left;
 }
 
 .util-ml-8px {
@@ -275,8 +290,28 @@ const onKeydownEnter = (e) => {
 
 /* チャット部分（スクロール実装）コンテナ */
 .chat-list {
-  max-height: 425px; /* 最大の高さを設定（必要に応じて調整） */
+  max-height: calc(100vh - 300px); /* ビューポートの高さから適当な余白を引いた高さ */
   overflow-y: auto; /* 縦方向のスクロールを有効にする */
+  padding: 5px 0; /* 上下に10pxの余白を追加 */
+}
+
+
+.sender {
+  margin-right: 10px; /* 送信者とコメントの間隔を調整 */
+}
+
+.message {
+  white-space: pre-wrap; /* コメントのテキストを改行に対応させる */
+}
+
+.timestamp {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  display: block; /* ブロックレベル要素として表示 */
+  margin-top: 5px; /* マージンを調整 */
+  color: gray; /* タイムスタンプのテキストをグレーにする */
+  font-size: 12px; /* フォントサイズを調整 */
 }
 
 </style>
