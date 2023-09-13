@@ -161,77 +161,81 @@ const onKeydownEnter = (e) => {
 </script>
 
 <template>
-  <ul>
+  <!-- 画面上に固定する「チャットルーム」とログインユーザ表示 -->
+  <div>
     <h1 class="text-h3 font-weight-medium" style="text-align: center;">チャットルーム</h1>
     <p style="text-align: right; margin-top: 10px;">ログインユーザ：{{ userName }}さん</p>
-  </ul>
-  <div class="mt-10">
-    <ul class="chat-list">
-  <li
-    class="item mt-4"
-    v-for="(chat, i) in chatList"
-    :key="i"
-    style="display: flex; flex-direction: column; margin-bottom: 10px;"
-  >
-    <div
-      :class="{'my-post': chat.name === userName && chat.name !== 'システム','other-user-post': chat.name !== userName && chat.name !== 'システム'}"
-      class="balloon"
+  </div>
+
+  <!-- チャットリスト -->
+  <ul class="chat-list">
+    <li
+      class="item mt-3 mb-3" 
+      v-for="(chat, i) in chatList"
+      :key="i"
+      style="display: flex; flex-direction: column;"
     >
-      <v-icon>mdi-account</v-icon>
-      <span v-if="chat.name !== 'システム'" class="sender">{{ chat.name }}さん</span>
-      {{ chat.content }}
-      <span class="timestamp">{{ chat.time }}</span>
-    </div>
-  </li>
-</ul>
-      <ul>
-        <li
-          class="item mt-4"
-          v-for="(msg, i) in memoList"
-          :key="i"
-        >
-          <v-icon color="pink-lighten-1">mdi-lead-pencil</v-icon> {{ msg.content }}
-        </li>
-      </ul>
-    </div>
-    
-    <!-- 画面下に固定する部分（テキスト入力＆投稿＆メモ＆退出） -->
-    <div class="fixed-bottom-container"> 
-
-      <div class="input-group">
-
-        <!-- <textarea variant="outlined"
-          placeholder="投稿文を入力してください"
-          rows="2" class="area"
-          type="text"
-          v-model="chatContent"
-          @keydown.enter.exact="onKeydownEnter">
-        </textarea>-->
-
-        <v-text-field label="投稿文を入力してください" type="text" v-model="chatContent" clearable height="50" @keydown.enter.exact="onKeydownEnter">
-          <template v-slot:append-inner>
-            <v-btn icon="mdi-send" class="button-normal" type="button" height="35" width="35" color="primary" id="postbutton" @click="onPublish">
-            </v-btn>
-            <v-btn icon="mdi-lead-pencil" class="button-normal util-ml-8px" type="button" height="35" width="35" color="pink-lighten-1" @click="onMemo">
-            </v-btn>
-          </template>
-        </v-text-field>
-
-        <!--<button class="button-normal" type="button" id="postbutton" @click="onPublish">投稿</button>-->
-
-        <!--<button class="button-normal util-ml-8px" type="button" @click="onMemo">メモ</button>-->
-
+      <div
+        :class="{
+          'my-post': chat.name === userName && chat.name !== 'システム',
+          'other-user-post': chat.name !== userName && chat.name !== 'システム'
+        }"
+        class="balloon"
+      >
+        <v-icon>mdi-account</v-icon>
+        <span v-if="chat.name !== 'システム'" class="sender">{{ chat.name }}さん</span>
+        {{ chat.content }}
+        <span class="timestamp">{{ chat.time }}</span>
       </div>
+    </li>
 
-      <router-link to="/" class="link">
-        <!--<button type="button" class="button-normal button-exit" @click="onExit">退室する</button>-->
-        <v-btn rounded type="button" class="button-normal button-exit" color="green-lighten-1" @click="onExit">
-          <v-icon>mdi-arrow-bottom-left-thick</v-icon>
-        </v-btn>
-      </router-link>
+    <!-- チャットリスト内のメモリスト -->
+    <ul>
+      <li
+        class="item mt-4"
+        v-for="(msg, i) in memoList"
+        :key="i"
+      >
+        <v-icon color="pink-lighten-1">mdi-lead-pencil</v-icon> {{ msg.content }}
+      </li>
+    </ul>
+  </ul>
+
+  <!-- 画面下に固定する部分（テキスト入力＆投稿＆メモ＆退出） -->
+  <div class="fixed-bottom-container"> 
+    <div class="input-group">
+
+      <!-- <textarea variant="outlined"
+        placeholder="投稿文を入力してください"
+        rows="2" class="area"
+        type="text"
+        v-model="chatContent"
+        @keydown.enter.exact="onKeydownEnter">
+      </textarea>-->
+
+      <v-text-field label="投稿文を入力してください" type="text" v-model="chatContent" clearable height="50" @keydown.enter.exact="onKeydownEnter">
+        <template v-slot:append-inner>
+          <v-btn icon="mdi-send" class="button-normal" type="button" height="35" width="35" color="primary" id="postbutton" @click="onPublish">
+          </v-btn>
+          <v-btn icon="mdi-lead-pencil" class="button-normal util-ml-8px" type="button" height="35" width="35" color="pink-lighten-1" @click="onMemo">
+          </v-btn>
+        </template>
+      </v-text-field>
+
+      <!--<button class="button-normal" type="button" id="postbutton" @click="onPublish">投稿</button>-->
+      <!--<button class="button-normal util-ml-8px" type="button" @click="onMemo">メモ</button>-->
 
     </div>
-  
+
+    <router-link to="/" class="link">
+      <!--<button type="button" class="button-normal button-exit" @click="onExit">退室する</button>-->
+      <v-btn rounded type="button" class="button-normal button-exit" color="green-lighten-1" @click="onExit">
+        <v-icon>mdi-arrow-bottom-left-thick</v-icon>
+      </v-btn>
+    </router-link>
+
+  </div>
+
 </template>
 
 <style scoped>
@@ -239,12 +243,13 @@ const onKeydownEnter = (e) => {
   text-decoration: none;
 }
 
+/* 
 .area {
   width: 500px;
   border: 1px solid #000;
   margin-top: 8px;
 }
-
+*/
 .item {
   display: block;
   white-space: pre-wrap;
@@ -254,7 +259,7 @@ const onKeydownEnter = (e) => {
   position: relative;
   display: inline-block;
   padding: 10px;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
   border-radius: 8px;
 }
 
@@ -283,32 +288,14 @@ const onKeydownEnter = (e) => {
   margin-top: 8px;
 }
 
-.input-group {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 20px; /* 縦に余白を追加 */
-  margin-left: 20px; /* 左側の余白を追加 */
-  margin-right: 20px; /* 右側の余白を追加 */
-}
-
-/* 画面下固定コンテナ */
-.fixed-bottom-container{
-  position: fixed; /* 固定位置に配置 */
-  bottom: 20px; /* 画面下部からの距離を調整 */
-  left: 0; /* 左端に配置 */
-  right: 0; /* 右端に配置 */
-  text-align: center; /* ボタンを中央揃えにする */
-}
-
-/* チャット部分（スクロール実装）コンテナ */
+/* チャット部分コンテナ */
 .chat-list {
-  max-height: calc(100vh - 300px); /* ビューポートの高さから適当な余白を引いた高さ */
+  max-height: calc(100vh - 275px); /* ビューポートの高さから適当な余白を引いた高さ */
   overflow-y: auto; /* 縦方向のスクロールを有効にする */
-  padding: 5px 0; /* 上下に10pxの余白を追加 */
+  padding-top: 10px 0; /* 上下に余白を追加 */
 }
 
-
+/* チャットコンテナ内のそれぞれの要素 */
 .sender {
   margin-right: 10px; /* 送信者とコメントの間隔を調整 */
 }
@@ -325,6 +312,24 @@ const onKeydownEnter = (e) => {
   margin-top: 5px; /* マージンを調整 */
   color: gray; /* タイムスタンプのテキストをグレーにする */
   font-size: 12px; /* フォントサイズを調整 */
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px; /* 縦に余白を追加 */
+  margin-left: 20px; /* 左側の余白を追加 */
+  margin-right: 20px; /* 右側の余白を追加 */
+}
+
+/* 画面下固定コンテナ */
+.fixed-bottom-container{
+  position: fixed; /* 固定位置に配置 */
+  bottom: 20px; /* 画面下部からの距離を調整 */
+  left: 0; /* 左端に配置 */
+  right: 0; /* 右端に配置 */
+  text-align: center; /* ボタンを中央揃えにする */
 }
 
 </style>
