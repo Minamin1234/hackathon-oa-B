@@ -173,19 +173,22 @@ const onKeydownEnter = (e) => {
       class="item mt-3 mb-3" 
       v-for="(chat, i) in chatList"
       :key="i"
-      style="display: flex; flex-direction: column;"
+      style="display: flex; flex-direction: column; position: relative;"
     >
-      <div
-        :class="{
-          'my-post': chat.name === userName && chat.name !== 'システム',
-          'other-user-post': chat.name !== userName && chat.name !== 'システム'
-        }"
-        class="balloon"
-      >
-        <v-icon>mdi-account</v-icon>
-        <span v-if="chat.name !== 'システム'" class="sender">{{ chat.name }}さん</span>
-        {{ chat.content }}
-        <span class="timestamp">{{ chat.time }}</span>
+      <div>
+        <div
+          :class="{
+            'system-message': chat.name === 'システム',
+            'my-post': chat.name === userName && chat.name !== 'システム',
+            'other-user-post': chat.name !== userName && chat.name !== 'システム',
+          }"
+          class="balloon"
+        >
+          <span v-if= "chat.name !== userName"> <v-icon>mdi-account</v-icon> </span>
+          <span v-if="chat.name !== 'システム' && chat.name !== userName">{{ chat.name }}さん  </span>
+          <span>{{ chat.content }}</span>
+          <span class="timestamp" v-if="chat.name !== 'システム'">{{ chat.time }}</span>
+        </div>
       </div>
     </li>
 
@@ -256,27 +259,53 @@ const onKeydownEnter = (e) => {
 }
 
 .balloon {
-  position: relative;
   display: inline-block;
   padding: 10px;
-  margin-bottom: 5px;
-  border-radius: 8px;
+  border-radius: 10px;
+  position: relative;
+  margin-bottom: 18px; /* チャット同士の感覚を調整 */
+}
+
+
+.timestamp {
+  margin-top: 5px; /* マージンを調整 */
+  position: absolute; /* 絶対位置指定 */
+  bottom: -20px; /* 下側に配置して少し下に表示 */
+  color: gray; /* タイムスタンプのテキストをグレーにする */
+  font-size: 12px; /* フォントサイズを調整 */
+  white-space: nowrap; /* テキストが折り返されないようにする */
 }
 
 .my-post {
-  background-color: rgba(255, 255, 0, 0.427); /* 自分の投稿の背景色 */
-  border: 2px solid orange; /* 2ピクセル幅のオレンジのボーダーを追加 */
+  background-color: rgba(255, 255, 0, 0.427);
+  border: 2px solid orange;
   text-align: left;
   float: right;
-  clear: right;
+  clear: both; /* clear: right; を clear: both; に修正 */
 }
 
 .other-user-post {
-  background-color: rgba(195, 222, 233, 0.577); /* 相手の投稿の背景色 */
-  border: 2px solid blue; /* 2ピクセル幅のブルーのボーダーを追加 */
+  background-color: rgba(195, 222, 233, 0.577);
+  border: 2px solid blue;
   text-align: left;
   float: left;
-  clear: left;
+  clear: both; /* clear: left; を clear: both; に修正 */
+}
+
+/* "システム" のメッセージのスタイル */
+.system-message {
+  text-align: center; /* 中央揃えにするスタイル */
+  clear: both;
+  width: 100%; /* 幅を100%に設定して横一列に表示 */
+}
+
+
+.my-post .timestamp {
+  right: 0;
+}
+
+.other-user-post .timestamp {
+  left: 0;
 }
 
 .util-ml-8px {
@@ -292,27 +321,10 @@ const onKeydownEnter = (e) => {
 .chat-list {
   max-height: calc(100vh - 275px); /* ビューポートの高さから適当な余白を引いた高さ */
   overflow-y: auto; /* 縦方向のスクロールを有効にする */
-  padding-top: 10px 0; /* 上下に余白を追加 */
+  padding-top: 15px 0; /* 上下に余白を追加 */
 }
 
 /* チャットコンテナ内のそれぞれの要素 */
-.sender {
-  margin-right: 10px; /* 送信者とコメントの間隔を調整 */
-}
-
-.message {
-  white-space: pre-wrap; /* コメントのテキストを改行に対応させる */
-}
-
-.timestamp {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  display: block; /* ブロックレベル要素として表示 */
-  margin-top: 5px; /* マージンを調整 */
-  color: gray; /* タイムスタンプのテキストをグレーにする */
-  font-size: 12px; /* フォントサイズを調整 */
-}
 
 .input-group {
   display: flex;
