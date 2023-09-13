@@ -175,6 +175,7 @@ const onKeydownEnter = (e) => {
           :key="i"
           :class="{'my-post': chat.name === userName && chat.name !== 'システム','other-user-post': chat.name !== userName && chat.name !== 'システム'}"
         >
+        <v-icon v-if="chat.name==='システム'">mdi-account</v-icon>
         {{ userName !== 'システム' && chat.name === 'システム' ? '' : chat.name + 'さん:' }} {{ chat.content }} ({{ chat.time }})
         </li>
       </ul>
@@ -184,7 +185,7 @@ const onKeydownEnter = (e) => {
           v-for="(msg, i) in memoList"
           :key="i"
         >
-          {{ msg.name }}: {{ msg.content }}
+          <v-icon color="pink-lighten-1">mdi-lead-pencil</v-icon> {{ msg.content }}
         </li>
       </ul>
     </div>
@@ -194,22 +195,36 @@ const onKeydownEnter = (e) => {
 
       <div class="input-group">
 
-        <textarea variant="outlined"
+        <!-- <textarea variant="outlined"
           placeholder="投稿文を入力してください"
           rows="2" class="area"
           type="text"
           v-model="chatContent"
           @keydown.enter.exact="onKeydownEnter">
-        </textarea>
+        </textarea>-->
 
-        <button class="button-normal" type="button" id="postbutton" @click="onPublish">投稿</button>
+        <v-text-field label="投稿文を入力してください" type="text" v-model="chatContent" clearable height="50" @keydown.enter.exact="onKeydownEnter">
+          <template v-slot:append-inner>
+            <v-btn rounded class="button-normal" type="button" height="30" width="40" color="primary" id="postbutton" @click="onPublish">
+              <v-icon>mdi-send</v-icon>
+            </v-btn>
+            <v-btn rounded class="button-normal util-ml-8px" type="button" height="30" width="40" color="pink-lighten-1" @click="onMemo">
+              <v-icon>mdi-lead-pencil</v-icon>
+            </v-btn>
+          </template>
+        </v-text-field>
 
-        <button class="button-normal util-ml-8px" type="button" @click="onMemo">メモ</button>
+        <!--<button class="button-normal" type="button" id="postbutton" @click="onPublish">投稿</button>-->
+
+        <!--<button class="button-normal util-ml-8px" type="button" @click="onMemo">メモ</button>-->
 
       </div>
 
       <router-link to="/" class="link">
-        <button type="button" class="button-normal button-exit" @click="onExit">退室する</button>
+        <!--<button type="button" class="button-normal button-exit" @click="onExit">退室する</button>-->
+        <v-btn rounded type="button" class="button-normal button-exit" color="green-lighten-1" @click="onExit">
+          <v-icon>mdi-arrow-bottom-left-thick</v-icon>
+        </v-btn>
       </router-link>
 
     </div>
