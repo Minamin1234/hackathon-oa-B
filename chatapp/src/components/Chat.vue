@@ -16,6 +16,11 @@ const chatContent = ref("")
 const chatList = reactive([])
 const memoList = reactive([])
 
+const error_no_content = ref("")
+const warning_time_limit = ref("")
+error_no_content.value = false
+warning_time_limit.value = false
+
 var Passsec = 0
 var PassageID = null
 
@@ -64,11 +69,15 @@ onMounted(() => {
 const onPublish = () => {
   // 投稿内容が空でないかを確認
   //console.log("onPublish");
-  if(0 < Passsec) {
-    alert("間隔をあけて投稿してください");
-    return;
-  }
   if (chatContent.value.trim() !== "") {
+      if(0 < Passsec) {
+        //alert("間隔をあけて投稿してください");
+        warning_time_limit.value = true;
+        setInterval(() => {
+          warning_time_limit.value = false;
+        }, 3000);
+      return;
+    }
     let msg = { 
       name: userName.value,
       content: chatContent.value,
@@ -81,7 +90,11 @@ const onPublish = () => {
     TimerStart();
   } else {
     // Display an alert if the message is empty
-    alert("メッセージを入力してください。");
+    //alert("メッセージを入力してください。");
+    error_no_content.value = true;
+    setInterval(() => {
+      error_no_content.value = false;
+    }, 3000)
   }
 }
 
@@ -163,6 +176,8 @@ const onKeydownEnter = (e) => {
 <template>
   <!-- 画面上に固定する「チャットルーム」とログインユーザ表示 -->
   <div>
+    <v-alert border="top" color="red" elevation="15" type="error" transition="slide-y-transition" v-model="error_no_content">メッセージを入力してください</v-alert>
+    <v-alert border="top" elevation="15" type="warning" transition="slide-y-transition" v-model="warning_time_limit">間隔をあけて投稿してください</v-alert>
     <h1 class="text-h3 font-weight-medium" style="text-align: center;">チャットルーム</h1>
     <p style="text-align: right; margin-top: 10px;">ログインユーザ：{{ userName }}さん</p>
   </div>
@@ -215,7 +230,6 @@ const onKeydownEnter = (e) => {
         v-model="chatContent"
         @keydown.enter.exact="onKeydownEnter">
       </textarea>-->
-
       <v-text-field label="投稿文を入力してください" type="text" v-model="chatContent" clearable height="50" @keydown.enter.exact="onKeydownEnter">
         <template v-slot:append-inner>
           <v-btn icon="mdi-send" class="button-normal" type="button" height="35" width="35" color="primary" id="postbutton" @click="onPublish">
@@ -229,7 +243,6 @@ const onKeydownEnter = (e) => {
       <!--<button class="button-normal util-ml-8px" type="button" @click="onMemo">メモ</button>-->
 
     </div>
-
     <router-link to="/" class="link">
       <!--<button type="button" class="button-normal button-exit" @click="onExit">退室する</button>-->
       <v-btn rounded type="button" class="button-normal button-exit" color="green-lighten-1" @click="onExit">
