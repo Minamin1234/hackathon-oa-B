@@ -183,6 +183,12 @@ const onKeyupEnter = (e) => {
   <div>
     <v-alert border="top" color="red" elevation="15" type="error" transition="slide-y-transition" v-model="error_no_content">メッセージを入力してください</v-alert>
     <v-alert border="top" elevation="15" type="warning" transition="slide-y-transition" v-model="warning_time_limit">間隔をあけて投稿してください</v-alert>
+    <router-link to="/" class="link">
+      <!--<button type="button" class="button-normal button-exit" @click="onExit">退室する</button>-->
+      <v-btn rounded type="button" class="button-normal button-exit" color="green-lighten-1" @click="onExit">
+        <v-icon>mdi-arrow-bottom-left-thick</v-icon>
+      </v-btn>
+    </router-link>
     <h1 class="text-h3 font-weight-medium" style="text-align: center;">チャットルーム</h1>
     <p style="text-align: right; margin-top: 10px;">ログインユーザ：{{ userName }}さん</p>
   </div>
@@ -263,12 +269,7 @@ const onKeyupEnter = (e) => {
       <!--<button class="button-normal util-ml-8px" type="button" @click="onMemo">メモ</button>-->
 
     </div>
-    <router-link to="/" class="link">
-      <!--<button type="button" class="button-normal button-exit" @click="onExit">退室する</button>-->
-      <v-btn rounded type="button" class="button-normal button-exit" color="green-lighten-1" @click="onExit">
-        <v-icon>mdi-arrow-bottom-left-thick</v-icon>
-      </v-btn>
-    </router-link>
+    
 
   </div>
 
