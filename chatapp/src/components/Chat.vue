@@ -177,6 +177,7 @@ const onKeydownEnter = (e) => {
       :class="{'my-post': chat.name === userName && chat.name !== 'システム','other-user-post': chat.name !== userName && chat.name !== 'システム'}"
       class="balloon"
     >
+      <v-icon>mdi-account</v-icon>
       <span v-if="chat.name !== 'システム'" class="sender">{{ chat.name }}さん</span>
       {{ chat.content }}
       <span class="timestamp">{{ chat.time }}</span>
@@ -209,11 +210,9 @@ const onKeydownEnter = (e) => {
 
         <v-text-field label="投稿文を入力してください" type="text" v-model="chatContent" clearable height="50" @keydown.enter.exact="onKeydownEnter">
           <template v-slot:append-inner>
-            <v-btn rounded class="button-normal" type="button" height="30" width="40" color="primary" id="postbutton" @click="onPublish">
-              <v-icon>mdi-send</v-icon>
+            <v-btn icon="mdi-send" class="button-normal" type="button" height="35" width="35" color="primary" id="postbutton" @click="onPublish">
             </v-btn>
-            <v-btn rounded class="button-normal util-ml-8px" type="button" height="30" width="40" color="pink-lighten-1" @click="onMemo">
-              <v-icon>mdi-lead-pencil</v-icon>
+            <v-btn icon="mdi-lead-pencil" class="button-normal util-ml-8px" type="button" height="35" width="35" color="pink-lighten-1" @click="onMemo">
             </v-btn>
           </template>
         </v-text-field>
