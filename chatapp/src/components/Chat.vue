@@ -193,8 +193,9 @@ const onKeyupEnter = (e) => {
     <p style="text-align: right; margin-top: 10px;">ログインユーザ：{{ userName }}さん</p>
   </div>
 
-  <!-- チャットリスト内のメモリスト -->
-  <ul>
+  <!-- チャットリスト -->
+  <ul class="chat-list">
+    <!-- チャットリスト内のメモリスト -->
     <li
       class="item mt-4"
       v-for="(msg, i) in memoList"
@@ -202,9 +203,6 @@ const onKeyupEnter = (e) => {
     >
       <v-icon color="pink-lighten-1">mdi-lead-pencil</v-icon> {{ msg.content }}
     </li>
-  </ul>
-  <!-- チャットリスト -->
-  <ul class="chat-list">
     <li
       class="item mt-3 mb-3" 
       v-for="(chat, i) in chatList"
@@ -356,6 +354,10 @@ const onKeyupEnter = (e) => {
   max-height: calc(100vh - 275px); /* ビューポートの高さから適当な余白を引いた高さ */
   overflow-y: auto; /* 縦方向のスクロールを有効にする */
   padding-top: 15px 0; /* 上下に余白を追加 */
+}
+
+.memo-list {
+  overflow-y: auto;
 }
 
 /* チャットコンテナ内のそれぞれの要素 */
