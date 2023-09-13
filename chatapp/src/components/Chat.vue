@@ -171,6 +171,11 @@ const onKeydownEnter = (e) => {
   if (e.keyCode == 229) return;
   onPublish();
 }
+
+const onKeyupEnter = (e) => {
+  if (0 < Passsec) return;
+  chatContent.value = "";
+}
 </script>
 
 <template>
@@ -229,14 +234,30 @@ const onKeydownEnter = (e) => {
         v-model="chatContent"
         @keydown.enter.exact="onKeydownEnter">
       </textarea>-->
+      <!--
       <v-text-field label="投稿文を入力してください" type="text" v-model="chatContent" clearable height="50" @keydown.enter.exact="onKeydownEnter">
+        
         <template v-slot:append-inner>
           <v-btn icon="mdi-send" class="button-normal" type="button" height="35" width="35" color="primary" id="postbutton" @click="onPublish">
           </v-btn>
           <v-btn icon="mdi-lead-pencil" class="button-normal util-ml-8px" type="button" height="35" width="35" color="pink-lighten-1" @click="onMemo">
           </v-btn>
         </template>
-      </v-text-field>
+      </v-text-field>-->
+      <v-textarea
+          label="メッセージ"
+          hint="Enterで送信"
+          rows="2"
+          @keydown.enter.exact="onKeydownEnter"
+          @keyup.enter.exact="onKeyupEnter"
+          v-model="chatContent">
+          <template v-slot:append-inner>
+            <v-btn icon="mdi-send" class="button-normal" type="button" height="35" width="35" color="primary" id="postbutton" @click="onPublish">
+            </v-btn>
+            <v-btn icon="mdi-lead-pencil" class="button-normal util-ml-8px" type="button" height="35" width="35" color="pink-lighten-1" @click="onMemo">
+            </v-btn>
+         </template>
+        </v-textarea>
 
       <!--<button class="button-normal" type="button" id="postbutton" @click="onPublish">投稿</button>-->
       <!--<button class="button-normal util-ml-8px" type="button" @click="onMemo">メモ</button>-->
