@@ -182,6 +182,16 @@ const onKeydownEnter = (e) => {
     <p style="text-align: right; margin-top: 10px;">ログインユーザ：{{ userName }}さん</p>
   </div>
 
+  <!-- チャットリスト内のメモリスト -->
+  <ul>
+    <li
+      class="item mt-4"
+      v-for="(msg, i) in memoList"
+      :key="i"
+    >
+      <v-icon color="pink-lighten-1">mdi-lead-pencil</v-icon> {{ msg.content }}
+    </li>
+  </ul>
   <!-- チャットリスト -->
   <ul class="chat-list">
     <li
@@ -206,17 +216,6 @@ const onKeydownEnter = (e) => {
         </div>
       </div>
     </li>
-
-    <!-- チャットリスト内のメモリスト -->
-    <ul>
-      <li
-        class="item mt-4"
-        v-for="(msg, i) in memoList"
-        :key="i"
-      >
-        <v-icon color="pink-lighten-1">mdi-lead-pencil</v-icon> {{ msg.content }}
-      </li>
-    </ul>
   </ul>
 
   <!-- 画面下に固定する部分（テキスト入力＆投稿＆メモ＆退出） -->
