@@ -1,5 +1,5 @@
 <script setup>
-import { inject, ref, reactive, onMounted } from "vue"
+import { inject, ref, reactive, onMounted, nextTick } from "vue"
 import io from "socket.io-client"
 
 // #region global state
@@ -15,6 +15,7 @@ const socket = io()
 const chatContent = ref("")
 const chatList = reactive([])
 const memoList = reactive([])
+
 
 const error_no_content = ref("")
 const warning_time_limit = ref("")
@@ -86,6 +87,12 @@ const onPublish = () => {
     socket.emit("publishEvent", msg);
     // 入力欄を初期化
     chatContent.value = ""
+    
+    nextTick(() => {
+      const timeline = document.getElementById("timeline");
+      timeline.scrollTo(0, timeline.scrollHeight);
+    });
+    //timeline.scrollTo(0, timeline.scrollHeight);
     //console.log(msg)
     TimerStart();
   } else {
@@ -112,9 +119,13 @@ const onMemo = () => {
     time : RealTime(),
   };
 
-  memoList.unshift(msg);
+  memoList.push(msg);
   // 入力欄を初期化
   chatContent.value = ""
+  nextTick(() => {
+      const timeline = document.getElementById("timeline");
+      timeline.scrollTo(0, timeline.scrollHeight);
+    });
 }
 // #endregion
 
@@ -131,7 +142,11 @@ const onReceiveExit = (data) => {
 
 // サーバから受信した投稿メッセージを画面上に表示する
 const onReceivePublish = (data) => {
-  chatList.unshift(data);
+  chatList.push(data);
+  nextTick(() => {
+      const timeline = document.getElementById("timeline");
+      timeline.scrollTo(0, timeline.scrollHeight);
+    });
 }
 // #endregion
 
@@ -146,7 +161,11 @@ const registerSocketEvent = () => {
       content: `${data}さんが入室しました。`,
       time: RealTime(),
     }
-    chatList.unshift(msg)
+    chatList.push(msg)
+    nextTick(() => {
+      const timeline = document.getElementById("timeline");
+      timeline.scrollTo(0, timeline.scrollHeight);
+    });
   })
 
   // 退室イベントを受け取ったら実行
@@ -156,7 +175,11 @@ const registerSocketEvent = () => {
       content: `${data}さんが退室しました。`,
       time : RealTime(),
     }
-    chatList.unshift(msg)
+    chatList.push(msg)
+    nextTick(() => {
+      const timeline = document.getElementById("timeline");
+      timeline.scrollTo(0, timeline.scrollHeight);
+    });
   })
 
   // 投稿イベントを受け取ったら実行
@@ -194,15 +217,7 @@ const onKeyupEnter = (e) => {
   </div>
 
   <!-- チャットリスト -->
-  <ul class="chat-list">
-    <!-- チャットリスト内のメモリスト -->
-    <li
-      class="item mt-4"
-      v-for="(msg, i) in memoList"
-      :key="i"
-    >
-      <v-icon color="pink-lighten-1">mdi-lead-pencil</v-icon> {{ msg.content }}
-    </li>
+  <ul class="chat-list" id="timeline">
     <li
       class="item mt-3 mb-3" 
       v-for="(chat, i) in chatList"
@@ -224,6 +239,14 @@ const onKeyupEnter = (e) => {
           <span class="timestamp" v-if="chat.name !== 'システム'">{{ chat.time }}</span>
         </div>
       </div>
+    </li>
+    <!-- チャットリスト内のメモリスト -->
+    <li
+      class="item mt-4"
+      v-for="(msg, i) in memoList"
+      :key="i"
+    >
+      <v-icon color="pink-lighten-1">mdi-lead-pencil</v-icon> {{ msg.content }}
     </li>
   </ul>
 
